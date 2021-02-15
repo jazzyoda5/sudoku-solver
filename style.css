@@ -1,0 +1,45 @@
+body {
+    background-color: rgb(44, 44, 44);
+}
+.game {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    color: white;
+    justify-content: space-around;
+    margin: auto;
+}
+.game table {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.game td {
+    padding: 0;
+    margin: 0;
+    width: 11.11%;
+    position: relative;
+}
+.game td:after {
+    content: '';
+    display: block;
+    margin-top: 100%;
+}
+.game button {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgb(255, 255, 255);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(180, 180, 180);
+    outline: none;
+}
+.game button:hover {
+    border-width: 2px;
+    border-color: rgba(88, 199, 93, 0.767);
+}
