@@ -1,14 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Sudoku</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
+    <div class="dashboard">
+      <div class="dash-buts">
+        <button
+          class="btn btn-secondary"
+          id="loadGameButton"
+          onclick="loadGame()"
+        >
+          Load Game
+        </button>
+        <button
+          class="btn btn-secondary"
+          id="resetGameButton"
+          onclick="resetGame()"
+        >
+          Reset Game
+        </button>
+        <button
+        class="btn btn-secondary"
+        id="resetGameButton"
+        onclick="clog()"
+      >
+        Console Log
+      </button>
+      </div>
+      <div class="game-utils">
+        <div class="gu-but-row">
+          <input
+            class="btn btn-outline-secondary"
+            type="button"
+            value="1"
+            id="num1"
+            onClick="numChoice(id)"
+          />
+          <input class="btn btn-outline-secondary" type="button" value="2" id="num2" onClick="numChoice(id)" />
+          <input class="btn btn-outline-secondary" type="button" value="3" id="num3" onClick="numChoice(id)" />
+        </div>
+        <div class="gu-but-row">
+          <input class="btn btn-outline-secondary" type="button" value="4" id="num4" onClick="numChoice(id)" />
+          <input class="btn btn-outline-secondary" type="button" value="5" id="num5" onClick="numChoice(id)" />
+          <input class="btn btn-outline-secondary" type="button" value="6" id="num6" onClick="numChoice(id)" />
+        </div>
+        <div class="gu-but-row">
+          <input class="btn btn-outline-secondary" type="button" value="7" id="num7" onClick="numChoice(id)" />
+          <input class="btn btn-outline-secondary" type="button" value="8" id="num8" onClick="numChoice(id)" />
+          <input class="btn btn-outline-secondary" type="button" value="9" id="num9" onClick="numChoice(id)" />
+        </div>
+      </div>
+    </div>
     <div class="game" id="game"></div>
     <script src="./index.js"></script>
   </body>

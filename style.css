@@ -1,5 +1,40 @@
 body {
-    background-color: rgb(44, 44, 44);
+    background-color: rgb(29, 29, 29);
+    padding-top: 1rem;
+}
+.dashboard {
+    display: flex;
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+    background-color:rgb(51, 51, 51);
+    text-align: center;
+    justify-content: space-around;
+    padding: 1rem;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    border-color:rgb(94, 94, 94);
+}
+.dash-buts {
+    display: flex;
+    height: 100%;
+    align-items: center;
+}
+#loadGameButton, #resetGameButton {
+    margin: 1rem;
+}
+.game-utils {
+    background-color: rgb(66, 66, 66);
+    border-color:rgb(94, 94, 94);
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    padding: 1rem;
+}
+.btn-outline-secondary {
+    color: white;
+    width: 40px;
 }
 .game {
     display: flex;
@@ -9,6 +44,7 @@ body {
     color: white;
     justify-content: space-around;
     margin: auto;
+    padding-top: 2rem;
 }
 .game table {
     width: 100%;
@@ -26,7 +62,7 @@ body {
     display: block;
     margin-top: 100%;
 }
-.game button {
+.game input {
     position: absolute;
     width: 100%;
     top: 0;
@@ -38,8 +74,93 @@ body {
     border-width: 1px;
     border-color: rgb(180, 180, 180);
     outline: none;
+    font-size: 20px;
 }
-.game button:hover {
+.game input:hover {
     border-width: 2px;
-    border-color: rgba(88, 199, 93, 0.767);
+    border-color: rgba(82, 161, 86, 0.767);
+}
+#num02,
+#num12,
+#num22,
+#num32,
+#num42,
+#num52,
+#num62,
+#num72,
+#num82,
+#num05,
+#num15,
+#num25,
+#num35,
+#num45,
+#num55,
+#num65,
+#num75,
+#num85 {
+    border-bottom-color: rgb(75, 204, 84);
+    border-bottom-width: 2px;
+}
+#num03,
+#num13,
+#num23,
+#num33,
+#num43,
+#num53,
+#num63,
+#num73,
+#num83,
+#num06,
+#num16,
+#num26,
+#num36,
+#num46,
+#num56,
+#num66,
+#num76,
+#num86 {
+    border-top-color: rgb(75, 204, 84);
+    border-top-width: 2px;
+}
+#num20,
+#num21,
+#num22,
+#num23,
+#num24,
+#num25,
+#num26,
+#num27,
+#num28,
+#num50,
+#num51,
+#num52,
+#num53,
+#num54,
+#num55,
+#num56,
+#num57,
+#num58 {
+    border-right-color: rgb(75, 204, 84);
+    border-right-width: 2px;
+}
+#num30,
+#num31,
+#num32,
+#num33,
+#num34,
+#num35,
+#num36,
+#num37,
+#num38,
+#num60,
+#num61,
+#num62,
+#num63,
+#num64,
+#num65,
+#num66,
+#num67,
+#num68 {
+    border-left-color: rgb(75, 204, 84);
+    border-left-width: 2px;
 }
