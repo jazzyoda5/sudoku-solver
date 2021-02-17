@@ -1,6 +1,10 @@
-
-
-// Game state
+/*
+#########################################################
+#########################################################
+STATE
+#########################################################
+#########################################################
+*/
 // First create an empty list and then populate it with a board
 var state = [];
 var possible_nums_state = [];
@@ -21,7 +25,15 @@ var clicked_but = null;
 var num_choice = null;
 var randomTemplate = null;
 
-function resetBoard() {
+/*
+#########################################################
+#########################################################
+FUNCTIONS FOR PLAYING THE GAME
+#########################################################
+#########################################################
+*/
+
+const resetBoard = () => {
   state = [];
   possible_nums_state = [];
   for (let i = 0; i <= 8; i++) {
@@ -40,11 +52,12 @@ function resetBoard() {
         let box = document.getElementById(box_id);
         box.value = null;
         box.style.color = 'black';
+        box.style.fontWeight = 'normal';
     }
   }
 }
 
-function resetGame() {
+const resetGame = () => {
   resetBoard();
   loadGame(true);
 }
@@ -52,10 +65,11 @@ function resetGame() {
 
 
 // Loads a template to the game board
-function loadGame(resetGame=false) {
+const loadGame = (resetGame=false) => {
 
   resetBoard();
 
+  // When reseting the game we don't want it to choose a new random template
   if (!resetGame) {
     var template = listOfTemplates[Math.floor(Math.random() * listOfTemplates.length)];   
     randomTemplate = template; 
@@ -80,6 +94,8 @@ function loadGame(resetGame=false) {
         let box_id = "num" + j.toString() + i.toString();
         let box = document.getElementById(box_id);
         box.value = state[j][i];
+
+        // Color determines if it is part of the template or not
         box.style.color = "gray";
       }
       b_index += 1;
@@ -88,48 +104,8 @@ function loadGame(resetGame=false) {
   updatePossibleValuesState();
 }
 
-function findPossibleValuesForBox(x, y) {
-  // List of possible values
-  var pos_val = [];
-  // List of impossible values
-  var impos_val = [];
-
-  // Check row and column
-  for (let i = 0; i <= 8; i++) {
-    if (state[x][i] !== 0) {
-      impos_val.push(state[x][i]);
-    }
-    if (state[i][y] !== 0) {
-      impos_val.push(state[i][y]);
-    }
-    }
-
-  // Check which subgrid
-  // list of 2 elements. X and Y coors of top left square of subgrid
-  // to which the box belongs to
-  let subgridTopLeft = topLeftCoorsOfSubgrid(x, y);
-
-  // check subgrid
-  for (let i = subgridTopLeft[1]; i <= subgridTopLeft[1] + 2; i++) {
-    for (let j = subgridTopLeft[0]; j <= subgridTopLeft[0] + 2; j++) {
-      if (state[j][i] !== 0) {
-        impos_val.push(state[j][i]);
-      }
-    }
-  }
-
-  // Possible values are all nums from 1 to 9 that are not in impossible numbers
-  for (let i = 1; i <= 9; i++) {
-    if (impos_val.includes(i)) {
-      continue;
-    } else {
-      pos_val.push(i);
-    }
-  }
-  return pos_val;
-}
-
-function updatePossibleValuesState() {
+// Calculates possible values for every square and stores it in possible_nums_state
+const updatePossibleValuesState = () => {
   for (let i = 0; i <= 8; i++) {
     for (let j = 0; j <= 8; j++) {
       // If box is not from the template
@@ -138,10 +114,10 @@ function updatePossibleValuesState() {
       }
     }
   }
-  console.log(possible_nums_state);
 }
 
-function isSolved() {
+// Checks if the puzzle is solved
+const isSolved = () => {
   let solved = true;
   for (let i = 0; i <= 8; i++) {
     for (let j = 0; j <= 8; j++) {
@@ -154,13 +130,20 @@ function isSolved() {
   return solved
 }
 
-function clog() {
-  printPossibleValues();
+const isSolvable = () => {
+  for (let i = 0; i <= 8; i++) {
+    for (let j = 0; j <= 8; j++) {
+      if (possible_nums_state[j][i].length < 1) {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 // Given x and y of a box
 // Calculates top left coors of it's subgrid
-function topLeftCoorsOfSubgrid(x, y) {
+const topLeftCoorsOfSubgrid = (x, y) => {
   // Top left x of subgrid
   let top_left_x = null;
   // top left y
@@ -184,7 +167,8 @@ function topLeftCoorsOfSubgrid(x, y) {
   return [top_left_x, top_left_y];
 }
 
-function boxClick(id) {
+// Handles clicking a box
+const boxClick = (id) => {
   // If clicked but is set
   if (clicked_but !== null) {
     let prev_box = document.getElementById(clicked_but);
@@ -195,7 +179,8 @@ function boxClick(id) {
   element.style.backgroundColor = "rgb(199, 255, 203)";
 }
 
-function numChoice(id) {
+// Handles when user chooses a number for the square
+const numChoice = (id) => {
   // Every id starts with "num" so slice the "num" away
   // To get only coordinates
   let num = parseInt(id.slice(3));
@@ -221,11 +206,12 @@ function numChoice(id) {
 
     // Clear clicked_but state
     clicked_but = null;
+
   }
   console.log("state", state);
 }
 
-function deleteNum() {
+const deleteNum = () => {
   if (clicked_but !== null) {
     let element = document.getElementById(clicked_but);
     if (element.style.color !== 'gray') {
@@ -268,26 +254,62 @@ drawTable(state);
 
 
 /*
+#########################################################
+#########################################################
 HERE ARE THE FUNCTIONS TO SOLVE THE BOARD
+#########################################################
+#########################################################
 */
 
-function solveBoard() {
-  // Check if it is solvable
-  for (let i = 0; i <= 8; i++) {
-    for (let j = 0; j <= 8; j++) {
-      if (possible_nums_state[j][i].length < 1) {
-        console.log('Not solvable');
-      }
-    }
-  }
+const shrinkButPress = () => {
   shrinkBoard();
 }
 
-const shrinkBoard = async () => {
+const solveButPress = () => {
+  resetGame();
+  solveBoard();
+}
+
+const solveBoard = () => {
+  // Get coordinates of first empty box
+  let empty_box = emptyBox();
+
+  // If box.length === 0 this means that the board is full
+  if (empty_box.length === 0) {
+    return true;
+  } else {
+  var x_coor = empty_box[0];
+  var y_coor = empty_box[1];
+  }
+
+  for (let num = 1; num <= 9; num++) {
+    let possible_values = findPossibleValuesForBox(x_coor, y_coor);
+    if (possible_values.includes(num)) {
+      // Update the state
+      state[x_coor][y_coor] = num;
+      // Update the element
+      let id = 'num' + x_coor.toString() + y_coor.toString();
+      let element = document.getElementById(id);
+      element.value = num;
+
+      if (solveBoard() === true) {
+        return true;
+      }
+
+      // backtrack
+      state[x_coor][y_coor] = 0;
+      element.value = '';
+    }
+  }
+  return false;
+}
+
+const shrinkBoard = () => {
   // Copy the state
   let continue_shrinking = true;
+  let count = 0;
   while (continue_shrinking === true) {
-    let pos_values_state_copy = JSON.parse(JSON.stringify(possible_nums_state));
+    let state_copy = JSON.parse(JSON.stringify(state));
     for (let i = 0; i <= 8; i++) {
       for (let j = 0; j <= 8; j++) {
 
@@ -299,13 +321,11 @@ const shrinkBoard = async () => {
           continue;
         } else {
           if (possible_nums_state[j][i].length === 1) {
-            console.log('yes!');
+
             let only_pos_value = possible_nums_state[j][i][0];
             if (state[j][i] !== only_pos_value) {
               state[j][i] = only_pos_value;
-              element.value = only_pos_value;
-              console.log('wait', i, j);
-              await sleep(300);   
+              element.value = only_pos_value; 
             }
 
           }
@@ -313,24 +333,74 @@ const shrinkBoard = async () => {
       }
     }
     updatePossibleValuesState();
-    if (possible_nums_state === pos_values_state_copy || isSolved()) {
+    if (state === state_copy || isSolved()) {
       continue_shrinking = false;
     }
-    console.log(continue_shrinking, possible_nums_state);
+    count += 1;
+    if (count >= 500) {
+      continue_shrinking = false;
+    }
   }
 }
 
-
-
-function bruteForceSearch() {
-
+const emptyBox = () => {
+  for (let i = 0; i <= 8; i++) {
+    for (let j = 0; j <= 8; j++) {
+      if (state[j][i] === 0) {
+        return [j, i];
+      }      
+    }
+  }
+  return [];
 }
 
-function sleep(ms) {
+const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function printPossibleValues() {
+const findPossibleValuesForBox = (x, y) => {
+  if (x === undefined) { return; }
+  // List of possible values
+  var pos_val = [];
+  // List of impossible values
+  var impos_val = [];
+
+  // Check row and column
+  for (let i = 0; i <= 8; i++) {
+    if (state[x][i] !== 0) {
+      impos_val.push(state[x][i]);
+    }
+    if (state[i][y] !== 0) {
+      impos_val.push(state[i][y]);
+    }
+    }
+
+  // Check which subgrid
+  // list of 2 elements. X and Y coors of top left square of subgrid
+  // to which the box belongs to
+  let subgridTopLeft = topLeftCoorsOfSubgrid(x, y);
+
+  // check subgrid
+  for (let i = subgridTopLeft[1]; i <= subgridTopLeft[1] + 2; i++) {
+    for (let j = subgridTopLeft[0]; j <= subgridTopLeft[0] + 2; j++) {
+      if (state[j][i] !== 0) {
+        impos_val.push(state[j][i]);
+      }
+    }
+  }
+
+  // Possible values are all nums from 1 to 9 that are not in impossible numbers
+  for (let i = 1; i <= 9; i++) {
+    if (impos_val.includes(i)) {
+      continue;
+    } else {
+      pos_val.push(i);
+    }
+  }
+  return pos_val;
+}
+
+const printPossibleValues = () => {
   console.log('Possible Values:');
   for (let i = 0; i <= 8; i++) {
     let line = '';
