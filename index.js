@@ -35,21 +35,27 @@ var clicked_but = null;
 var num_choice = null;
 
 function resetGame() {
-  // j is the x coor of state
-  // i is the y coor of state
+  state = [];
+  possible_nums_state = [];
+  for (let i = 0; i <= 8; i++) {
+    let row1 = [];
+    let row2 = [];
+    for (let j = 0; j <= 8; j++) {
+      row1.push(0);
+      row2.push([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    }
+    state.push(row1);
+    possible_nums_state.push(row2);
+  }
   for (let i = 0; i <= 8; i++) {
     for (let j = 0; j <= 8; j++) {
-      let box_id = "num" + j.toString() + i.toString();
-      let box = document.getElementById(box_id);
 
-      // If box is part of the template
-      if (box.style.color === "gray") {
-        continue;
-      }
-      box.value = "";
-      state[j][i] = 0;
+        let box_id = "num" + j.toString() + i.toString();
+        let box = document.getElementById(box_id);
+        box.value = null;
     }
   }
+  loadGame();
 }
 
 // Loads a template to the game board
@@ -62,12 +68,12 @@ function loadGame() {
   for (let i = 0; i <= 8; i++) {
     for (let j = 0; j <= 8; j++) {
       // If box is not empty on the template
-      if (board3[b_index] !== ".") {
+      if (board1[b_index] !== ".") {
         // Update the state
-        state[j][i] = parseInt(board3[b_index]);
+        state[j][i] = parseInt(board1[b_index]);
 
         // Update possibility lists
-        possible_nums_state[j][i] = [parseInt(board3[b_index])];
+        possible_nums_state[j][i] = [parseInt(board1[b_index])];
 
         // Change button value on screen
         let box_id = "num" + j.toString() + i.toString();
@@ -79,7 +85,6 @@ function loadGame() {
     }
   }
   updatePossibleValuesState();
-  console.log(state);
 }
 
 function findPossibleValuesForBox(x, y) {
@@ -116,8 +121,9 @@ function findPossibleValuesForBox(x, y) {
   for (let i = 1; i <= 9; i++) {
     if (impos_val.includes(i)) {
       continue;
+    } else {
+      pos_val.push(i);
     }
-    pos_val.push(i);
   }
   return pos_val;
 }
@@ -126,11 +132,25 @@ function updatePossibleValuesState() {
   for (let i = 0; i <= 8; i++) {
     for (let j = 0; j <= 8; j++) {
       // If box is not from the template
-      if (board3[(i * 9 + j)] === ".") {
+      if (board1[(i * 9 + j)] === "." && possible_nums_state[j][i].length > 1) {
         possible_nums_state[j][i] = findPossibleValuesForBox(j, i);
       }
     }
   }
+  console.log(possible_nums_state);
+}
+
+function isSolved() {
+  let solved = true;
+  for (let i = 0; i <= 8; i++) {
+    for (let j = 0; j <= 8; j++) {
+      if (possible_nums_state[j][i].length !== 1 || state[j][i] === 0) {
+        solved = false;
+        return solved;
+      }
+    }
+  }
+  return solved
 }
 
 function clog() {
@@ -169,20 +189,15 @@ function boxClick(id) {
     let prev_box = document.getElementById(clicked_but);
     prev_box.style.backgroundColor = "white";
   }
-
-  // Every id starts with "num" so slice the "num" away
-  // To get only coordinates
-
   clicked_but = id;
   let element = document.getElementById(id);
   element.style.backgroundColor = "rgb(199, 255, 203)";
-  console.log("clicked_but ", clicked_but);
 }
 
 function numChoice(id) {
   // Every id starts with "num" so slice the "num" away
   // To get only coordinates
-  let num = id.slice(3);
+  let num = parseInt(id.slice(3));
 
   if (clicked_but) {
     let box = document.getElementById(clicked_but);
@@ -207,6 +222,16 @@ function numChoice(id) {
     clicked_but = null;
   }
   console.log("state", state);
+}
+
+function deleteNum() {
+  if (clicked_but !== null) {
+    let element = document.getElementById(clicked_but);
+    if (element.style.color !== 'gray') {
+      element.value = null;
+      state[clicked_but[3]][clicked_but[4]] = 0;
+    }
+  }
 }
 
 // Draw a table
@@ -239,3 +264,49 @@ id[1] is the y coordinates
 };
 
 drawTable(state);
+
+
+/*
+HERE ARE THE FUNCTIONS TO SOLVE THE BOARD
+*/
+
+function solveBoard() {
+  shrinkBoard();
+}
+
+const shrinkBoard = async () => {
+  let board_solved = false;
+  while (board_solved === false) {
+    for (let i = 0; i <= 8; i++) {
+      for (let j = 0; j <= 8; j++) {
+        let id = 'num' + j.toString() + i.toString();
+        let element = document.getElementById(id);
+  
+        // If it is part of the template
+        if (element.style.color === 'gray') {
+          continue;
+        } else {
+          if (possible_nums_state[j][i].length === 1) {
+            console.log('yes!');
+            let only_pos_value = possible_nums_state[j][i][0];
+            state[j][i] = only_pos_value;
+            element.value = only_pos_value;
+          }
+        }
+      }
+    }
+    updatePossibleValuesState();
+    board_solved = isSolved();
+    console.log(board_solved, possible_nums_state);
+  }
+}
+
+
+
+function bruteForceSearch() {
+
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

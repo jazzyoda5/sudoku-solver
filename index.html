@@ -39,32 +39,41 @@
       >
         Console Log
       </button>
-      </div>
-      <div class="game-utils">
-        <div class="gu-but-row">
-          <input
-            class="btn btn-outline-secondary"
-            type="button"
-            value="1"
-            id="num1"
-            onClick="numChoice(id)"
-          />
-          <input class="btn btn-outline-secondary" type="button" value="2" id="num2" onClick="numChoice(id)" />
-          <input class="btn btn-outline-secondary" type="button" value="3" id="num3" onClick="numChoice(id)" />
-        </div>
-        <div class="gu-but-row">
-          <input class="btn btn-outline-secondary" type="button" value="4" id="num4" onClick="numChoice(id)" />
-          <input class="btn btn-outline-secondary" type="button" value="5" id="num5" onClick="numChoice(id)" />
-          <input class="btn btn-outline-secondary" type="button" value="6" id="num6" onClick="numChoice(id)" />
-        </div>
-        <div class="gu-but-row">
-          <input class="btn btn-outline-secondary" type="button" value="7" id="num7" onClick="numChoice(id)" />
-          <input class="btn btn-outline-secondary" type="button" value="8" id="num8" onClick="numChoice(id)" />
-          <input class="btn btn-outline-secondary" type="button" value="9" id="num9" onClick="numChoice(id)" />
-        </div>
+      <button
+        class="btn btn-secondary"
+        id="resetGameButton"
+        onclick="solveBoard()"
+      >
+        Solve Board
+      </button>
       </div>
     </div>
+    <div class="game-utils">
+      <div class="gu-but-row">
+        <input
+          class="num-but btn btn-outline-secondary"
+          type="button"
+          value="1"
+          id="num1"
+          onClick="numChoice(id)"
+        />
+        <input class="num-but btn btn-outline-secondary" type="button" value="2" id="num2" onClick="numChoice(id)" />
+        <input class="num-but btn btn-outline-secondary" type="button" value="3" id="num3" onClick="numChoice(id)" />
+      </div>
+      <div class="gu-but-row">
+        <input class="num-but btn btn-outline-secondary" type="button" value="4" id="num4" onClick="numChoice(id)" />
+        <input class="num-but btn btn-outline-secondary" type="button" value="5" id="num5" onClick="numChoice(id)" />
+        <input class="num-but btn btn-outline-secondary" type="button" value="6" id="num6" onClick="numChoice(id)" />
+      </div>
+      <div class="gu-but-row">
+        <input class="num-but btn btn-outline-secondary" type="button" value="7" id="num7" onClick="numChoice(id)" />
+        <input class="num-but btn btn-outline-secondary" type="button" value="8" id="num8" onClick="numChoice(id)" />
+        <input class="num-but btn btn-outline-secondary" type="button" value="9" id="num9" onClick="numChoice(id)" />
+      </div>
+      <button class="btn btn-outline-secondary" onClick="deleteNum()">Delete</button>
+    </div>
     <div class="game" id="game"></div>
+
     <script src="./index.js"></script>
   </body>
 </html>
