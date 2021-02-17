@@ -1,18 +1,4 @@
-// Board Templates
-const board1 =
-  "7218..945849.57326.3.249817.5798.6349634157.228.3761.9.1...4568.9..21473...53829.";
-const board2 =
-  "1.2.54.37367..84..9.5673218..4.16..3....871.6816...5.44.1.69382....317.57.38.5961";
-const board3 =
-  ".6.1...5...83.56..2.......18..4.7..6..6...3..7..9.1..45.......2..7..69...4...8.7.";
-const board4 =
-  "...7.....1.45.9....79..18....7....5....3.4.6.....2...9.....7.....24..1..4.395....";
-const board5 =
-  "...7.....1.45.9....79..18....7....5....3.4.6.....2...9.....7.....24..1..4.395....";
-const board6 =
-  "..1.8.6.4.376.....5.............5.....6.1.8.....4.............3.....752.8.2.9.7..";
-const board7 =
-  "..2.9.1.7.386.....4.............5.....9.1.3.....4.............4.....792.8.6.3.7..";
+
 
 // Game state
 // First create an empty list and then populate it with a board
@@ -33,8 +19,9 @@ for (let i = 0; i <= 8; i++) {
 // When a box is clicked, put it's id here
 var clicked_but = null;
 var num_choice = null;
+var randomTemplate = null;
 
-function resetGame() {
+function resetBoard() {
   state = [];
   possible_nums_state = [];
   for (let i = 0; i <= 8; i++) {
@@ -49,17 +36,31 @@ function resetGame() {
   }
   for (let i = 0; i <= 8; i++) {
     for (let j = 0; j <= 8; j++) {
-
         let box_id = "num" + j.toString() + i.toString();
         let box = document.getElementById(box_id);
         box.value = null;
+        box.style.color = 'black';
     }
   }
-  loadGame();
 }
 
+function resetGame() {
+  resetBoard();
+  loadGame(true);
+}
+
+
+
 // Loads a template to the game board
-function loadGame() {
+function loadGame(resetGame=false) {
+
+  resetBoard();
+
+  if (!resetGame) {
+    var template = listOfTemplates[Math.floor(Math.random() * listOfTemplates.length)];   
+    randomTemplate = template; 
+  }
+
   // Index to get numbers from the board template
   let b_index = 0;
 
@@ -68,12 +69,12 @@ function loadGame() {
   for (let i = 0; i <= 8; i++) {
     for (let j = 0; j <= 8; j++) {
       // If box is not empty on the template
-      if (board1[b_index] !== ".") {
+      if (randomTemplate[b_index] !== '0') {
         // Update the state
-        state[j][i] = parseInt(board1[b_index]);
+        state[j][i] = parseInt(randomTemplate[b_index]);
 
         // Update possibility lists
-        possible_nums_state[j][i] = [parseInt(board1[b_index])];
+        possible_nums_state[j][i] = [parseInt(randomTemplate[b_index])];
 
         // Change button value on screen
         let box_id = "num" + j.toString() + i.toString();
@@ -132,7 +133,7 @@ function updatePossibleValuesState() {
   for (let i = 0; i <= 8; i++) {
     for (let j = 0; j <= 8; j++) {
       // If box is not from the template
-      if (board1[(i * 9 + j)] === "." && possible_nums_state[j][i].length > 1) {
+      if (randomTemplate[(i * 9 + j)] === "0" && possible_nums_state[j][i].length > 1) {
         possible_nums_state[j][i] = findPossibleValuesForBox(j, i);
       }
     }
@@ -154,7 +155,7 @@ function isSolved() {
 }
 
 function clog() {
-  console.log(findPossibleValuesForBox(3, 2));
+  printPossibleValues();
 }
 
 // Given x and y of a box
@@ -271,14 +272,25 @@ HERE ARE THE FUNCTIONS TO SOLVE THE BOARD
 */
 
 function solveBoard() {
+  // Check if it is solvable
+  for (let i = 0; i <= 8; i++) {
+    for (let j = 0; j <= 8; j++) {
+      if (possible_nums_state[j][i].length < 1) {
+        console.log('Not solvable');
+      }
+    }
+  }
   shrinkBoard();
 }
 
 const shrinkBoard = async () => {
-  let board_solved = false;
-  while (board_solved === false) {
+  // Copy the state
+  let continue_shrinking = true;
+  while (continue_shrinking === true) {
+    let pos_values_state_copy = JSON.parse(JSON.stringify(possible_nums_state));
     for (let i = 0; i <= 8; i++) {
       for (let j = 0; j <= 8; j++) {
+
         let id = 'num' + j.toString() + i.toString();
         let element = document.getElementById(id);
   
@@ -289,15 +301,22 @@ const shrinkBoard = async () => {
           if (possible_nums_state[j][i].length === 1) {
             console.log('yes!');
             let only_pos_value = possible_nums_state[j][i][0];
-            state[j][i] = only_pos_value;
-            element.value = only_pos_value;
+            if (state[j][i] !== only_pos_value) {
+              state[j][i] = only_pos_value;
+              element.value = only_pos_value;
+              console.log('wait', i, j);
+              await sleep(300);   
+            }
+
           }
         }
       }
     }
     updatePossibleValuesState();
-    board_solved = isSolved();
-    console.log(board_solved, possible_nums_state);
+    if (possible_nums_state === pos_values_state_copy || isSolved()) {
+      continue_shrinking = false;
+    }
+    console.log(continue_shrinking, possible_nums_state);
   }
 }
 
@@ -310,3 +329,136 @@ function bruteForceSearch() {
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+function printPossibleValues() {
+  console.log('Possible Values:');
+  for (let i = 0; i <= 8; i++) {
+    let line = '';
+    for (let j = 0; j <= 8; j++) {
+      let box = possible_nums_state[j][i];
+      for (let k = 9; k >= 0; k--) {
+        if (box[k]) {
+          line += box[k];
+        } 
+        else if (k === 9) {
+          line += '|';
+        } else {
+          line += ' ';
+        }
+      }
+    }
+    console.log(line);
+  }
+}
+
+/*
+#########################################################
+#########################################################
+Templates
+#########################################################
+#########################################################
+*/
+
+const template01 = `003020600900305001001806400008102900700000008006708200002609500800203009005010300`
+const template02 = `200080300060070084030500209000105408000000000402706000301007040720040060004010003`
+const template03 = `000000907000420180000705026100904000050000040000507009920108000034059000507000000`
+const template04 = `030050040008010500460000012070502080000603000040109030250000098001020600080060020`
+const template05 = `020810740700003100090002805009040087400208003160030200302700060005600008076051090`
+const template06 = `100920000524010000000000070050008102000000000402700090060000000000030945000071006`
+const template07 = `043080250600000000000001094900004070000608000010200003820500000000000005034090710`
+const template08 = `480006902002008001900370060840010200003704100001060049020085007700900600609200018`
+const template09 = `000900002050123400030000160908000000070000090000000205091000050007439020400007000`
+const template10 = `001900003900700160030005007050000009004302600200000070600100030042007006500006800`
+const template11 = `000125400008400000420800000030000095060902010510000060000003049000007200001298000`
+const template12 = `062340750100005600570000040000094800400000006005830000030000091006400007059083260`
+const template13 = `300000000005009000200504000020000700160000058704310600000890100000067080000005437`
+const template14 = `630000000000500008005674000000020000003401020000000345000007004080300902947100080`
+const template15 = `000020040008035000000070602031046970200000000000501203049000730000000010800004000`
+const template16 = `361025900080960010400000057008000471000603000259000800740000005020018060005470329`
+const template17 = `050807020600010090702540006070020301504000908103080070900076205060090003080103040`
+const template18 = `080005000000003457000070809060400903007010500408007020901020000842300000000100080`
+const template19 = `003502900000040000106000305900251008070408030800763001308000104000020000005104800`
+const template20 = `000000000009805100051907420290401065000000000140508093026709580005103600000000000`
+const template21 = `020030090000907000900208005004806500607000208003102900800605007000309000030020050`
+const template22 = `005000006070009020000500107804150000000803000000092805907006000030400010200000600`
+const template23 = `040000050001943600009000300600050002103000506800020007005000200002436700030000040`
+const template24 = `004000000000030002390700080400009001209801307600200008010008053900040000000000800`
+const template25 = `360020089000361000000000000803000602400603007607000108000000000000418000970030014`
+const template26 = `500400060009000800640020000000001008208000501700500000000090084003000600060003002`
+const template27 = `007256400400000005010030060000508000008060200000107000030070090200000004006312700`
+const template28 = `000000000079050180800000007007306800450708096003502700700000005016030420000000000`
+const template29 = `030000080009000500007509200700105008020090030900402001004207100002000800070000090`
+const template30 = `200170603050000100000006079000040700000801000009050000310400000005000060906037002`
+const template31 = `000000080800701040040020030374000900000030000005000321010060050050802006080000000`
+const template32 = `000000085000210009960080100500800016000000000890006007009070052300054000480000000`
+const template33 = `608070502050608070002000300500090006040302050800050003005000200010704090409060701`
+const template34 = `050010040107000602000905000208030501040070020901080406000401000304000709020060010`
+const template35 = `053000790009753400100000002090080010000907000080030070500000003007641200061000940`
+const template36 = `006080300049070250000405000600317004007000800100826009000702000075040190003090600`
+const template37 = `005080700700204005320000084060105040008000500070803010450000091600508007003010600`
+const template38 = `000900800128006400070800060800430007500000009600079008090004010003600284001007000`
+const template39 = `000080000270000054095000810009806400020403060006905100017000620460000038000090000`
+const template40 = `000602000400050001085010620038206710000000000019407350026040530900020007000809000`
+const template41 = `000900002050123400030000160908000000070000090000000205091000050007439020400007000`
+const template42 = `380000000000400785009020300060090000800302009000040070001070500495006000000000092`
+const template43 = `000158000002060800030000040027030510000000000046080790050000080004070100000325000`
+const template44 = `010500200900001000002008030500030007008000500600080004040100700000700006003004050`
+const template45 = `080000040000469000400000007005904600070608030008502100900000005000781000060000010`
+const template46 = `904200007010000000000706500000800090020904060040002000001607000000000030300005702`
+const template47 = `000700800006000031040002000024070000010030080000060290000800070860000500002006000`
+const template48 = `001007090590080001030000080000005800050060020004100000080000030100020079020700400`
+const template49 = `000003017015009008060000000100007000009000200000500004000000020500600340340200000`
+const template50 = `300200000000107000706030500070009080900020004010800050009040301000702000000008006`
+
+const listOfTemplates = [
+  template01,
+  template02,
+  template03,
+  template04,
+  template05,
+  template06,
+  template07,
+  template08,
+  template09,
+  template10,
+  template11,
+  template12,
+  template13,
+  template14,
+  template15,
+  template16,
+  template17,
+  template18,
+  template19,
+  template20,
+  template21,
+  template22,
+  template23,
+  template24,
+  template25,
+  template26,
+  template27,
+  template28,
+  template29,
+  template30,
+  template31,
+  template32,
+  template33,
+  template34,
+  template35,
+  template36,
+  template37,
+  template38,
+  template39,
+  template40,
+  template41,
+  template42,
+  template43,
+  template44,
+  template45,
+  template46,
+  template47,
+  template48,
+  template49,
+  template50
+]
