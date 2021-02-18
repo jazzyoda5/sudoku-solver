@@ -263,7 +263,7 @@ HERE ARE THE FUNCTIONS TO SOLVE THE BOARD
 #########################################################
 */
 
-// Neccessary states
+// States
 var moves = [];
 var move1 = {};
 var move2 = {};
@@ -274,6 +274,7 @@ const shrinkButPress = () => {
   shrinkBoard();
 }
 
+// Solve the board slowly
 const solveButPress = () => {
   window.clearInterval(moveInterval);
   moves = [];
@@ -284,12 +285,16 @@ const solveButPress = () => {
   visualizeSolving();
   moveInterval = window.setInterval(makeMove, [solving_speed]);
 }
+
+// Solve the board as fast as possible
 const solve2ButPress = () => {
   window.clearInterval(moveInterval);
   resetGame();
   solveBoard();
 }
 
+// Solve the board but instead of updating the board
+// Save the moves in moves
 const visualizeSolving = () => {
   // Get coordinates of first empty box
   let empty_box = emptyBox();
@@ -330,6 +335,7 @@ const visualizeSolving = () => {
   return false;
 }
 
+// Make first move in moves
 const makeMove = () => {
   if (moves.length > 0) {
 
@@ -351,6 +357,7 @@ const makeMove = () => {
   }
 }
 
+// Solve as fast as possible
 const solveBoard = () => {
   // Get coordinates of first empty box
   let empty_box = emptyBox();
@@ -385,6 +392,8 @@ const solveBoard = () => {
   return false;
 }
 
+// If there are any boxes where there can only be 1 possible value
+// It solves them
 const shrinkBoard = () => {
   // Copy the state
   let continue_shrinking = true;
@@ -424,6 +433,7 @@ const shrinkBoard = () => {
   }
 }
 
+// Finds the first possible empty box
 const emptyBox = () => {
   for (let i = 0; i <= 8; i++) {
     for (let j = 0; j <= 8; j++) {
@@ -498,7 +508,6 @@ const printPossibleValues = () => {
         }
       }
     }
-    console.log(line);
   }
 }
 
