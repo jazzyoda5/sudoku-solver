@@ -12,7 +12,10 @@
       integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+    />
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
@@ -22,30 +25,58 @@
           class="btn btn-secondary"
           id="loadGameButton"
           onclick="loadGame()"
+          style="width:120px;"
         >
-          Load Game
+          New Game
         </button>
         <button
           class="btn btn-secondary"
           id="resetGameButton"
           onclick="resetGame()"
+          style="width:120px;"
         >
           Reset Game
         </button>
-      <button
-        class="btn btn-secondary"
-        id="resetGameButton"
-        onclick="solveButPress()"
-      >
-        Solve Board
-      </button>
-      <button
-      class="btn btn-secondary"
-      id="resetGameButton"
-      onclick="shrinkButPress()"
-      >
-        Shrink
-      </button>
+        <button
+          class="btn btn-secondary"
+          id="resetGameButton"
+          onclick="shrinkButPress()"
+          style="width:120px;"
+        >
+          Shrink
+        </button>
+        <div class="solve-buts">
+          <p style="color: white; display: block">
+            Visualize how a backtracking algorithm solves the board. Some boards
+            will take longer to complete than others. If you don't want to wait,
+            solve it instantly.
+          </p>
+          <button
+            class="btn btn-secondary"
+            id="solveGameButton"
+            onclick="solveButPress()"
+          >
+            Visualize Solving
+          </button>
+          <button
+            class="btn btn-secondary"
+            id="solveGameButton"
+            onclick="solve2ButPress()"
+          >
+            Solve Instantly
+          </button>
+          <input
+            type="range"
+            class="form-range"
+            min="10"
+            max="105"
+            id="solvingSpeedRange"
+            style="margin-top: 1rem; width: "
+          />
+          <label for="customRange3" class="form-label" style="color: white"
+            >Solving Speed</label
+          >
+        </div>
       </div>
     </div>
     <div class="game" id="game"></div>
@@ -58,22 +89,71 @@
           id="num1"
           onClick="numChoice(id)"
         />
-        <input class="num-but btn btn-outline-secondary" type="button" value="2" id="num2" onClick="numChoice(id)" />
-        <input class="num-but btn btn-outline-secondary" type="button" value="3" id="num3" onClick="numChoice(id)" />
+        <input
+          class="num-but btn btn-outline-secondary"
+          type="button"
+          value="2"
+          id="num2"
+          onClick="numChoice(id)"
+        />
+        <input
+          class="num-but btn btn-outline-secondary"
+          type="button"
+          value="3"
+          id="num3"
+          onClick="numChoice(id)"
+        />
       </div>
       <div class="gu-but-row">
-        <input class="num-but btn btn-outline-secondary" type="button" value="4" id="num4" onClick="numChoice(id)" />
-        <input class="num-but btn btn-outline-secondary" type="button" value="5" id="num5" onClick="numChoice(id)" />
-        <input class="num-but btn btn-outline-secondary" type="button" value="6" id="num6" onClick="numChoice(id)" />
+        <input
+          class="num-but btn btn-outline-secondary"
+          type="button"
+          value="4"
+          id="num4"
+          onClick="numChoice(id)"
+        />
+        <input
+          class="num-but btn btn-outline-secondary"
+          type="button"
+          value="5"
+          id="num5"
+          onClick="numChoice(id)"
+        />
+        <input
+          class="num-but btn btn-outline-secondary"
+          type="button"
+          value="6"
+          id="num6"
+          onClick="numChoice(id)"
+        />
       </div>
       <div class="gu-but-row">
-        <input class="num-but btn btn-outline-secondary" type="button" value="7" id="num7" onClick="numChoice(id)" />
-        <input class="num-but btn btn-outline-secondary" type="button" value="8" id="num8" onClick="numChoice(id)" />
-        <input class="num-but btn btn-outline-secondary" type="button" value="9" id="num9" onClick="numChoice(id)" />
+        <input
+          class="num-but btn btn-outline-secondary"
+          type="button"
+          value="7"
+          id="num7"
+          onClick="numChoice(id)"
+        />
+        <input
+          class="num-but btn btn-outline-secondary"
+          type="button"
+          value="8"
+          id="num8"
+          onClick="numChoice(id)"
+        />
+        <input
+          class="num-but btn btn-outline-secondary"
+          type="button"
+          value="9"
+          id="num9"
+          onClick="numChoice(id)"
+        />
       </div>
-      <button class="btn btn-outline-secondary" onClick="deleteNum()">Delete</button>
+      <button class="btn btn-outline-secondary" onClick="deleteNum()">
+        Delete
+      </button>
     </div>
     <script src="./index.js"></script>
-
   </body>
 </html>

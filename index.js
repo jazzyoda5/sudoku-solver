@@ -34,6 +34,7 @@ FUNCTIONS FOR PLAYING THE GAME
 */
 
 const resetBoard = () => {
+  window.clearInterval();
   state = [];
   possible_nums_state = [];
   for (let i = 0; i <= 8; i++) {
@@ -53,6 +54,7 @@ const resetBoard = () => {
         box.value = null;
         box.style.color = 'black';
         box.style.fontWeight = 'normal';
+        box.style.backgroundColor = 'white';
     }
   }
 }
@@ -66,7 +68,7 @@ const resetGame = () => {
 
 // Loads a template to the game board
 const loadGame = (resetGame=false) => {
-
+  window.clearInterval();
   resetBoard();
 
   // When reseting the game we don't want it to choose a new random template
@@ -176,7 +178,7 @@ const boxClick = (id) => {
   }
   clicked_but = id;
   let element = document.getElementById(id);
-  element.style.backgroundColor = "rgb(199, 255, 203)";
+  element.style.backgroundColor = "#cee1fd";
 }
 
 // Handles when user chooses a number for the square
@@ -261,13 +263,92 @@ HERE ARE THE FUNCTIONS TO SOLVE THE BOARD
 #########################################################
 */
 
+// Neccessary states
+var moves = [];
+var move1 = {};
+var move2 = {};
+var moveInterval = null;
+
 const shrinkButPress = () => {
+  window.clearInterval(moveInterval);
   shrinkBoard();
 }
 
 const solveButPress = () => {
+  window.clearInterval(moveInterval);
+  moves = [];
+  resetGame();
+  let solving_speed_input = document.getElementById("solvingSpeedRange").value;
+  let solving_speed = 110 - solving_speed_input;
+  console.log(solving_speed)
+  visualizeSolving();
+  moveInterval = window.setInterval(makeMove, [solving_speed]);
+}
+const solve2ButPress = () => {
+  window.clearInterval(moveInterval);
   resetGame();
   solveBoard();
+}
+
+const visualizeSolving = () => {
+  // Get coordinates of first empty box
+  let empty_box = emptyBox();
+
+  // If box.length === 0 this means that the board is full
+  if (empty_box.length === 0) {
+    return true;
+  } else {
+  var x_coor = empty_box[0];
+  var y_coor = empty_box[1];
+  }
+
+  for (let num = 1; num <= 9; num++) {
+    let possible_values = findPossibleValuesForBox(x_coor, y_coor);
+    if (possible_values.includes(num)) {
+      state[x_coor][y_coor] = num;
+      // Update the element
+      let id = 'num' + x_coor.toString() + y_coor.toString();
+
+      move1 = {
+        id: id,
+        num: num
+      }
+      moves.push(move1);
+
+      if (visualizeSolving() === true) {
+        return true;
+      }
+
+      state[x_coor][y_coor] = 0;
+      move2 = {
+        id: id,
+        num: 0
+      }
+      moves.push(move2);
+    }
+  }
+  return false;
+}
+
+const makeMove = () => {
+  if (moves.length > 0) {
+
+    let move = moves[0];
+
+    let id = move.id;
+    let num = move.num;
+    let element = document.getElementById(id);
+    if (num !== 0) {
+      element.value = num;      
+    } else {
+      element.value = null;
+    }
+
+
+    moves.shift();
+  } else {
+    window.clearInterval(moveInterval);
+  }
 }
 
 const solveBoard = () => {
