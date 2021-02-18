@@ -34,7 +34,7 @@ FUNCTIONS FOR PLAYING THE GAME
 */
 
 const resetBoard = () => {
-  window.clearInterval();
+  window.clearInterval(moveInterval);
   state = [];
   possible_nums_state = [];
   for (let i = 0; i <= 8; i++) {
@@ -68,7 +68,6 @@ const resetGame = () => {
 
 // Loads a template to the game board
 const loadGame = (resetGame=false) => {
-  window.clearInterval();
   resetBoard();
 
   // When reseting the game we don't want it to choose a new random template
@@ -281,7 +280,6 @@ const solveButPress = () => {
   resetGame();
   let solving_speed_input = document.getElementById("solvingSpeedRange").value;
   let solving_speed = 110 - solving_speed_input;
-  console.log(solving_speed)
   visualizeSolving();
   moveInterval = window.setInterval(makeMove, [solving_speed]);
 }
@@ -492,7 +490,6 @@ const findPossibleValuesForBox = (x, y) => {
 }
 
 const printPossibleValues = () => {
-  console.log('Possible Values:');
   for (let i = 0; i <= 8; i++) {
     let line = '';
     for (let j = 0; j <= 8; j++) {
