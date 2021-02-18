@@ -24,6 +24,7 @@ for (let i = 0; i <= 8; i++) {
 var clicked_but = null;
 var num_choice = null;
 var randomTemplate = null;
+var moveInterval = null;
 
 /*
 #########################################################
@@ -266,7 +267,6 @@ HERE ARE THE FUNCTIONS TO SOLVE THE BOARD
 var moves = [];
 var move1 = {};
 var move2 = {};
-var moveInterval = null;
 
 const shrinkButPress = () => {
   window.clearInterval(moveInterval);
