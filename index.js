@@ -273,7 +273,9 @@ const shrinkButPress = () => {
   shrinkBoard();
 }
 
-// Solve the board slowly
+// Visualize solving
+// Stores the moves in moves variable
+// And than excecutes each move separately
 const solveButPress = () => {
   window.clearInterval(moveInterval);
   moves = [];
@@ -443,10 +445,8 @@ const emptyBox = () => {
   return [];
 }
 
-const sleep = (ms) => {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
+// Find all values that are possible for that box
+// x-y are coordinates
 const findPossibleValuesForBox = (x, y) => {
   if (x === undefined) { return; }
   // List of possible values
@@ -489,6 +489,8 @@ const findPossibleValuesForBox = (x, y) => {
   return pos_val;
 }
 
+// Function to nicely console.log the
+// possible_nums_state
 const printPossibleValues = () => {
   for (let i = 0; i <= 8; i++) {
     let line = '';
@@ -515,7 +517,7 @@ Templates
 #########################################################
 #########################################################
 */
-
+// Empty board templates to be randomly chosen
 const template01 = `003020600900305001001806400008102900700000008006708200002609500800203009005010300`
 const template02 = `200080300060070084030500209000105408000000000402706000301007040720040060004010003`
 const template03 = `000000907000420180000705026100904000050000040000507009920108000034059000507000000`
